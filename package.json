@@ -5,6 +5,12 @@
   "repository": "https://github.com/SALGONE/hackatweet_frontend.git",
   "author": "Thibaud Veyssade <tveyssade@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",
