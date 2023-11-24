@@ -8,6 +8,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from '../reducers/user';
+import likes from '../reducers/likes';
 
 const reducers = combineReducers({user, likes});
 

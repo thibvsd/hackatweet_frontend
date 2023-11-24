@@ -4,7 +4,6 @@ import React from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import logo from "../images/pineapple.png";
 
 function Tweet() {
   const [caractere, setCaractere] = useState("");
@@ -45,7 +44,7 @@ function Tweet() {
   const newTweet = dbTweet.map((content, index) => (
     <div key={index} className={styles.tweet}>
       <div className={styles.tweetUp}>
-        <img src="../images/pineapple.png" alt="pineapple" />
+        <img src="../assets/pineapple.png" alt="pineapple" />
         <p>jeanclaude</p>
       </div>
       <div>
