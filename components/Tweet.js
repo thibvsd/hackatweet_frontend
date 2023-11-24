@@ -45,7 +45,7 @@ function Tweet() {
   const newTweet = dbTweet.map((content, index) => (
     <div key={index} className={styles.tweet}>
       <div className={styles.tweetUp}>
-        <img src="../images/pineapple.png" alt="pineapple" />
+        <img className={styles.imgStyle} src="../images/pineapple.png" alt="pineapple" />
         <p>jeanclaude</p>
       </div>
       <div>
