@@ -1,0 +1,15 @@
+.homeContainer {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1.5fr 3fr 2fr;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.middle {
+    border: 1px solid red;
+}
