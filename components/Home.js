@@ -4,8 +4,11 @@ import Trends from "./Trends";
 import styles from "../styles/Home.module.css";
 import Tweet from "./Tweet";
 import { useEffect, useState } from "react";
+import { addTweet } from '../reducers/tweet';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Home() {
+  const dispatch = useDispatch();
 
   const [dbTweet, setDbTweet] = useState([]);
   const [caractere, setCaractere] = useState("");
@@ -15,11 +18,12 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          //console.log('data', data); 
-          setDbTweet(data.content);
+          console.log('data', data); 
+          setDbTweet( data.content );
         }
       });
   }, []);
+  console.log("dans dbTweet: " + dbTweet);
 
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
@@ -39,13 +43,15 @@ function Home() {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
+          //dispatch(addTweet(data.content));
         document.querySelector('#idContent').value = '';
         }
       });
   }
 
   const contentMap = dbTweet.map((data, i) => {
-    return <Tweet key={i} {...data} />;
+    console.log('dans le map: ' + data);
+    return <Tweet key={i} content={data} />;
   });
 
   return (

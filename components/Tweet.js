@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 function Tweet(props) {
+  console.log('props', props);
   return (
     <div className={styles.tweet}>
       <div className={styles.tweetUp}>
