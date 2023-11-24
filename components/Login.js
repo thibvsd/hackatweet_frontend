@@ -17,17 +17,19 @@ import Link from 'next/link';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 
+import {useRouter} from 'next/router';
+
 //import { removeAllBookmark } from '../reducers/bookmarks';
 //import { unhideArticles } from '../reducers/hiddenArticles';
 
 function Login() {
 
-	/*const dispatch = useDispatch();
-	const user = useSelector((state) => state.user.value)
-	const [date, setDate] = useState('2050-11-22T23:59:59');*/
+	/*const [date, setDate] = useState('2050-11-22T23:59:59');*/
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
+
+    const router = useRouter();
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [activeComponent, setActiveComponent] = useState(null);
@@ -45,20 +47,8 @@ function Login() {
 		setIsModalVisible(!isModalVisible);
 	};
 
-    //let user = false;
-	let modalContent;
-	//if (!user.isConnected) {
-  if (!user) {
-		modalContent = (
-			<div className={styles.registerContainer}>
-				<div className={styles.registerSection}>
-				{activeComponent === 'signUp' && <SignUp />}
-				{activeComponent === 'signIn' && <SignIn />}
-				</div>
-			</div>
-		);
-	}
-	console.log('act comp=', activeComponent);
+    if (user) router.replace('/home');
+
 	return (
 		<>
 		<header className={styles.header}>

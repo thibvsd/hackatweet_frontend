@@ -33,9 +33,12 @@ function SignUp(props) {
                     setSignUpPassword('');
                     setIsModalVisible(false);
                     console.log('modal signup', isModalVisible );
+                    router.replace('/home');
+                } else {
+                    console.log('modal signin', isModalVisible );
                 }
             });
-    };
+        };
 
 	return (
         <div className={styles.registerSection}>

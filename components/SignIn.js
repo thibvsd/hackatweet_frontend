@@ -31,7 +31,9 @@ function SignIn(props) {
                     setSignInPassword('');
                     setIsModalVisible(false);
                     console.log('modal signin', isModalVisible );
-                    history.push('/home'); // Redirect to the specified route
+                    router.replace('/home');
+                }else {
+                    console.log('modal signin', isModalVisible );
                 }
             });
     };
