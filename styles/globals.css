@@ -1,14 +1,17 @@
-body {
-    margin: 0;
-  }
+
+@font-face {
+	font-family: "Mont-Heavy";
+	src: url("/fonts/Mont-Heavy.otf");
+}
+
 body {
     margin: 0 auto;
+    background-color: black;
 }
 .ant-modal-content {
     background: black!important;
     color: white;
 }
-
 .ant-modal-content input {
     background: black!important;
     color: white;
@@ -16,4 +19,22 @@ body {
     margin: 10px;
     border-radius: 10px;
     border: 1px solid white;
+}
+.container {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;    
+    display: grid;
+    grid-template-columns: 2fr 3fr; /* La première colonne occupe 2/5 et la deuxième 3/5 */
+    gap: 0px; /* Espace entre les colonnes */
+    height: 100vh; /* Hauteur de 100% de la hauteur de la fenêtre */
+    background-color: black;
+}
+.container h1, .container h2 {
+    padding: 20px 0;
+}
+.container h1, h1 {
+    font-size: 55px;
+    margin: 5px 0;
+}
+.container h2 {
+    padding: 20px 0;
 }

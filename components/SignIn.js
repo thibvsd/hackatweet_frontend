@@ -30,10 +30,9 @@ function SignIn(props) {
                     setSignInUsername('');
                     setSignInPassword('');
                     setIsModalVisible(false);
-                    console.log('modal signin', isModalVisible );
                     router.replace('/home');
                 }else {
-                    console.log('modal signin', isModalVisible );
+                    setIsModalVisible(false);
                 }
             });
     };

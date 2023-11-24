@@ -28,29 +28,26 @@ function Login() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
+	console.log('user', user);
 
     const router = useRouter();
+    if (user.token) router.replace('/home');
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [activeComponent, setActiveComponent] = useState(null);
 
 	const handleCancel = () => {
+		setActiveComponent(null);
 		setIsModalVisible(false);
 	  };
 
-	const handleLogout = () => {
-		dispatch(logout());
-		//dispatch(removeAllBookmark());
-	};
 	const showModal = (component) => {
 		setActiveComponent(component);
 		setIsModalVisible(!isModalVisible);
 	};
 
-    if (user) router.replace('/home');
-
 	return (
-		<>
+<>
 		<header className={styles.header}>
 			{isModalVisible && <div id="react-modals">
 				<Modal  center mask={true} maskstyle={{ backgroundcolor: "red" }}

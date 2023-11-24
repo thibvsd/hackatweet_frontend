@@ -44,11 +44,6 @@
     margin: 10px 0 20px 0;
 }
 
-@font-face {
-	font-family: "Mont-Heavy";
-	src: url("/fonts/Mont-Heavy.otf");
-}
-
 .header {
 	display: flex;
 	flex-direction: column;

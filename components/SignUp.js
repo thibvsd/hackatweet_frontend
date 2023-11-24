@@ -35,6 +35,7 @@ function SignUp(props) {
                     console.log('modal signup', isModalVisible );
                     router.replace('/home');
                 } else {
+                    setIsModalVisible(false);
                     console.log('modal signin', isModalVisible );
                 }
             });

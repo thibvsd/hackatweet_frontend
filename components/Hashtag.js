@@ -1,54 +1,71 @@
-
-import Head from 'next/head';
-import LastTweets from './LastTweets';
-import Trends from './Trends';
-import styles from '../styles/Home.module.css';
+import styles from "../styles/Home.module.css";
+import Tweet from "./Tweet";
+import { useEffect, useState } from "react";
+import Left from "./Left";
 
 function Hashtag() {
 
-    /*const likes = useSelector((state) => state.likes.value);
-    const lastTweets = useSelector((state) => state.lastTweets.value);
+  const [dbTweet, setDbTweet] = useState([]);
+  const [caractere, setCaractere] = useState("");
 
-    const [articlesData, setArticlesData] = useState([]);
-    const [topArticle, setTopArticle] = useState({});
-  
-    useEffect(() => {
-      fetch('http://localhost:3000/articles')
-        .then(response => response.json())
-        .then(data => {
-          //setTopArticle(data.articles[0]);
-          //setArticlesData(data.articles.filter((data, i) => i > 0));
-        });
-    }, []);
-  
-    const tweets = articlesData.map((data, i) => {
-      /*const isBookmarked = bookmarks.some(bookmark => bookmark.title === data.title);
-      const isHidden = hiddenArticles.some(hiddenArticle => hiddenArticle.title === data.title);
-      if(!isHidden) return <Article key={i} {...data} isBookmarked={isBookmarked} isHidden={isHidden} />;
-    });
-  
-    let lastTweets;
-    if (likes.some(like => like.title === topArticle.title)) {
-        lastTweets = <LastTweets {...lastTweets} isLiked={true} />
-    } else {
-        lastTweets = <LastTweets {...lastTweets} isLiked={false} />
-    }*/
-    
-    let lastTweets = <LastTweets isLiked={false} />
-    let trends = <Trends isHashtag={false} />
+  useEffect(() => {
+    fetch("http://localhost:3000/alltweet", {})
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log('alltweet data', data); 
+          setDbTweet(data.content);
+        }
+      });
+  }, []);
 
-    return (
-        <div>
-        <Head>
-          <title>Morning News - Home</title>
-        </Head>
-        <div className={styles.articlesContainer}>lasttweets
-          {lastTweets}
-          </div>
-        <div className={styles.trendsContainer}>trends
-          {trends}
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue.length <= 280) {
+      setCaractere(inputValue);
+    }
+  };
+
+  
+  const addHashtag = () => {
+    const contentTweet = document.querySelector('#idContent').value;    
+    console.log("dans addHashtag: " + contentTweet);
+    fetch("http://localhost:3000/alltweet", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: contentTweet }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+            document.querySelector('#idContent').value = '';
+        }
+      });
+  }
+
+  const contentMap = dbTweet.map((data, i) => {
+    return <Tweet key={i} {...data} />;
+  });
+
+  return (
+    <div className={styles.homeContainer}>
+      <div className={styles.left}><Left></Left></div>
+      <div className={styles.middle}>
+        <div className={styles.middleHeader}>
+            <h1>Hashtag</h1>
+          <input
+            id="idContent"
+            value={caractere}
+            onChange={handleInputChange}
+            placeholder="Hashtag"
+          ></input>
+          <button onClick={() => addHashtag()}>Tweet</button>
         </div>
+        <div className={styles.middleDown}>{contentMap}</div>
       </div>
-    );
-   }
-   export default Hashtag;
+      <div className={styles.right}></div>
+    </div>
+  );
+}
+
+export default Hashtag;
