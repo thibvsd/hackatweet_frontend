@@ -3,6 +3,7 @@ import LastTweets from "./LastTweets";
 import Trends from "./Trends";
 import styles from "../styles/Home.module.css";
 import Tweet from "./Tweet";
+import Left from "./Left";
 import { useEffect, useState } from "react";
 import { addTweet } from '../reducers/tweet';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,7 +57,7 @@ function Home() {
 
   return (
     <div className={styles.homeContainer}>
-      <div className={styles.left}></div>
+    <div className={styles.left}><Left></Left></div>
       <div className={styles.middle}>
         <div className={styles.middleHeader}>
           <input
