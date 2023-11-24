@@ -1,6 +1,5 @@
 import '../styles/globals.css';
 import Head from 'next/head';
-import Header from '../components/Header';
 
 import { Provider } from 'react-redux';
 
@@ -12,7 +11,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import likes from '../reducers/likes';
 import user from '../reducers/user';
 
-const reducers = combineReducers({bookmarks, user, hiddenArticles});
+const reducers = combineReducers({user, likes});
 
 const persistConfig = { key: 'hackatweet', storage };
 
@@ -34,7 +33,6 @@ function App({ Component, pageProps }) {
         <Head>
           <title>hackatweet</title>
         </Head>
-        <Header />
         <Component {...pageProps} />
         </PersistGate>
     </Provider>

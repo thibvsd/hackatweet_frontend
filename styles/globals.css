@@ -1,0 +1,16 @@
+body {
+    margin: 0 auto;
+}
+.ant-modal-content {
+    background: black!important;
+    color: white;
+}
+
+.ant-modal-content input {
+    background: black!important;
+    color: white;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    border: 1px solid white;
+}
