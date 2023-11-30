@@ -28,7 +28,6 @@ function Login() {
 
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state.user.value);
-	console.log('user', user);
 
     const router = useRouter();
     if (user.token) router.replace('/home');

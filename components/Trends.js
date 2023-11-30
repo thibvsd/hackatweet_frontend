@@ -1,54 +1,41 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { addLike, removeLike } from '../reducers/likes';
-import styles from '../styles/LastTweets.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
+import styles from '../styles/Trends.module.css';
 
-function Trends(props) {
+function Trends() {
 
-	//const dispatch = useDispatch();
-	//const user = useSelector((state) => state.user.value);
-        
-    /* select in collection tweet =>
-    UserModel.find({}).sort({firstName: 1, lastName:1 ,email:1, createdAt:1 , updatedAt: 1 })
-    */
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  const tweetsData = useSelector((state) => state.tweets.value);
 
-    
-    const user = {};
-	const handleLikeClick = () => {
-		if (!user.token) {
-			return;
-		}
-        /*
-		fetch(`http://localhost:3000/users/like/${user.token}`)
-			.then(response => response.json())
-			.then(data => {
-				if (data.result && data.canBookmark) {
-					if (props.isBookmarked) {
-						dispatch(removeLike(props));
-					} else {
-						dispatch(addLike(props));
-					}
-				}
-			}); */
-	}
+  const [trendsData, setTrendsData] = useState([]);
+console.log('token=', user.token);
+  useEffect(() => {
+    fetch(`http://localhost:3000/tweets/trends/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        data.result && setTrendsData(data.trends);
+      });
+  }, [tweetsData]);
 
-	let iconStyle = {};
-	if (props.isLiked) {
-		iconStyle = { 'color': '#E9BE59' };
-	}
+  const trends = trendsData.map((data, i) => {
+    return (
+      <Link key={i} href={`/hashtag/${data.hashtag.slice(1)}`}>
+        <div className={styles.tweetContainer}>
+          <h3 className={styles.hashtag}>{data.hashtag}</h3>
+          <h4 className={styles.nbrTweet}>{data.count} Tweet{data.count > 1 && 's'}</h4>
+        </div>
+      </Link>
 
-	return (
-		<div className={styles.topContainer}>
-			<img src={props.urlToImage} className={styles.image} alt={props.title} />
-			<div className={styles.topText}>
-				<h2 className={styles.topTitle}>{props.title}</h2>
-				<FontAwesomeIcon onClick={() => handleLikeClick()} icon={faHeart} style={iconStyle} className={styles.likeIcon} />
-				<h4>{props.author}</h4>
-				<p>{props.description}</p>
-			</div>
-		</div>
-	);
+    );
+  });
+
+  return (
+    <div className={styles.container}>
+      {trends}
+    </div>
+  );
 }
 
 export default Trends;

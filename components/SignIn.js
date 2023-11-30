@@ -11,13 +11,11 @@ function SignIn(props) {
 	const [signInPassword, setSignInPassword] = useState('');
 
 	const [isModalVisible, setIsModalVisible] = useState(false);
-	/*const dispatch = useDispatch();
-	const user = useSelector((state) => state.user.value);*/
+	const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
 
     const router = useRouter();
     const handleConnection = () => {
-
-        console.log('signin', signInUsername );
 
         fetch('http://localhost:3000/users/signin', {
             method: 'POST',
@@ -26,7 +24,7 @@ function SignIn(props) {
         }).then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    dispatch(login({ username: signInUsername, token: data.token }));
+                    dispatch(login({ username: signInUsername, token: data.token, _id: data._id, name: data.name }));
                     setSignInUsername('');
                     setSignInPassword('');
                     setIsModalVisible(false);

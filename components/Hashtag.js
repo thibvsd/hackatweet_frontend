@@ -1,69 +1,95 @@
-import styles from "../styles/Home.module.css";
-import Tweet from "./Tweet";
-import { useEffect, useState } from "react";
-import Left from "./Left";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../reducers/user';
+import { loadTweets } from '../reducers/tweets';
+import { useRouter } from 'next/router';
+import styles from '../styles/Hashtag.module.css';
+import Link from 'next/link';
+import Tweet from './Tweet';
+import Trends from './Trends';
+import Image from 'next/image';
 
 function Hashtag() {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.value);
+  const tweetsData = useSelector((state) => state.tweets.value);
 
-  const [dbTweet, setDbTweet] = useState([]);
-  const [caractere, setCaractere] = useState("");
+  // Redirect to /login if not logged in
+  const router = useRouter();
+  const { hashtag } = router.query;
+  if (!user.token) {
+    router.push('/login');
+  }
+
+  const [query, setQuery] = useState('#');
 
   useEffect(() => {
-    fetch("http://localhost:3000/alltweet", {})
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log('alltweet data', data); 
-          setDbTweet(data.content);
-        }
-      });
-  }, []);
+    if (!hashtag) {
+      return;
+    }
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (inputValue.length <= 280) {
-      setCaractere(inputValue);
+    setQuery('#' + hashtag);
+
+    fetch(`http://localhost:3000/tweets/hashtag/${user.token}/${hashtag}`)
+      .then(response => response.json())
+      .then(data => {
+        data.result && dispatch(loadTweets(data.tweets));
+      });
+  }, [hashtag]);
+
+  const handleSubmit = () => {
+    if (query.length > 1) {
+      router.push(`/hashtag/${query.slice(1)}`);
     }
   };
 
-  
-  const addHashtag = () => {
-    const contentTweet = document.querySelector('#idContent').value;    
-    console.log("dans addHashtag: " + contentTweet);
-    fetch("http://localhost:3000/alltweet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: contentTweet }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-            document.querySelector('#idContent').value = '';
-        }
-      });
-  }
-
-  const contentMap = dbTweet.map((data, i) => {
+  const tweets = tweetsData.map((data, i) => {
     return <Tweet key={i} {...data} />;
   });
 
   return (
-    <div className={styles.homeContainer}>
-      <div className={styles.left}><Left></Left></div>
-      <div className={styles.middle}>
-        <div className={styles.middleHeader}>
-            <h1>Hashtag</h1>
-          <input
-            id="idContent"
-            value={caractere}
-            onChange={handleInputChange}
-            placeholder="Hashtag"
-          ></input>
-          <button onClick={() => addHashtag()}>Tweet</button>
+    <div className={styles.container}>
+      <div className={styles.leftSection}>
+        <div>
+          <Link href="/">
+            <Image src="/logo.png" alt="Logo" width={50} height={50} className={styles.logo} />
+          </Link>
         </div>
-        <div className={styles.middleDown}>{contentMap}</div>
+        <div>
+          <div className={styles.userSection}>
+            <div>
+              <Image src="/avatar.png" alt="Avatar" width={46} height={46} className={styles.avatar} />
+            </div>
+            <div className={styles.userInfo}>
+              <p className={styles.name}>{user.firstName}</p>
+              <p className={styles.username}>@{user.username}</p>
+            </div>
+          </div>
+          <button onClick={() => { router.push('/login'); dispatch(logout()); }} className={styles.logout}>Logout</button>
+        </div>
       </div>
-      <div className={styles.right}></div>
+
+      <div className={styles.middleSection}>
+        <h2 className={styles.title}>Hashtag</h2>
+        <div>
+          <div className={styles.searchSection}>
+            <input
+              type="text"
+              onChange={(e) => setQuery('#' + e.target.value.replace(/^#/, ''))}
+              onKeyUp={(e) => e.key === 'Enter' && handleSubmit()}
+              value={query}
+              className={styles.searchBar}
+            />
+          </div>
+          {tweets.length === 0 && <p className={styles.noTweet}>No tweets found with #{hashtag}</p>}
+          {tweets}
+        </div>
+      </div>
+
+      <div className={styles.rightSection}>
+        <h2 className={styles.title}>Trends</h2>
+        <Trends />
+      </div>
     </div>
   );
 }

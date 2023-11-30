@@ -27,7 +27,7 @@ function SignUp(props) {
         }).then(response => response.json())
             .then(data => {
                 if (data.result) {
-                    dispatch(login({ username: signUpUsername, name: signUpName, token: data.token }));
+                    dispatch(login({ username: signUpUsername, name: signUpName, token: data.token, _id: data._id, name: data.name }));
                     setSignUpUsername('');
                     setSignUpName('');
                     setSignUpPassword('');

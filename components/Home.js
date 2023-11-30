@@ -1,77 +1,75 @@
-import Head from "next/head";
-import LastTweets from "./LastTweets";
+
+import { useRouter } from 'next/router';
 import Trends from "./Trends";
 import styles from "../styles/Home.module.css";
-import Tweet from "./Tweet";
+import LastTweets from "./LastTweets";
 import Left from "./Left";
 import { useEffect, useState } from "react";
-import { addTweet } from '../reducers/tweet';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { addTweet, loadTweets } from '../reducers/tweets';
 
 function Home() {
-  const dispatch = useDispatch();
 
   const [dbTweet, setDbTweet] = useState([]);
   const [caractere, setCaractere] = useState("");
 
+  const dispatch = useDispatch();
+	const user = useSelector((state) => state.user.value);
+  
   useEffect(() => {
-    fetch("http://localhost:3000/tweet", {})
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log('data', data); 
-          setDbTweet( data.content );
-        }
+    if (!user.token) {
+      return;
+    }
+    fetch(`http://localhost:3000/tweets/all/${user.token}`)
+      .then(response => response.json())
+      .then(data => {
+        data.result && dispatch(loadTweets(data.tweets));
       });
   }, []);
-  console.log("dans dbTweet: " + dbTweet);
 
   const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    if (inputValue.length <= 280) {
-      setCaractere(inputValue);
+    if (e.target.value.length <= 280) {
+      setCaractere(e.target.value);
     }
   };
+  const letterCount = caractere.length;
 
-  const addTweet = () => {
-    const contentTweet = document.querySelector('#idContent').value;
-    console.log("dans l addTweet: " + contentTweet);
-    fetch("http://localhost:3000/tweet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: contentTweet }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+  const handleSubmit = () => {
+    fetch('http://localhost:3000/tweets', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: user.token, content: caractere }),
+    }).then(response => response.json())
+      .then(data => {
         if (data.result) {
-          //dispatch(addTweet(data.content));
-        document.querySelector('#idContent').value = '';
+          const createdTweet = { ...data.tweet, author: user };
+          dispatch(addTweet(createdTweet));
+          setCaractere('');
         }
       });
-  }
-
-  const contentMap = dbTweet.map((data, i) => {
-    console.log('dans le map: ' + data);
-    return <Tweet key={i} content={data} />;
-  });
+  };
 
   return (
     <div className={styles.homeContainer}>
     <div className={styles.left}><Left></Left></div>
-      <div className={styles.middle}>
+      <div className={styles.middle}><h1>Home</h1>
+        <input
+          id="idContent"
+          value={caractere}
+          onChange={handleInputChange}
+          placeholder="What's up ?"
+        ></input>
+        <input type="hidden" name="_id" value={user._id} />
         <div className={styles.middleHeader}>
-          <input
-            id="idContent"
-            value={caractere}
-            onChange={handleInputChange}
-            placeholder="What's up ?"
-          ></input>
-          <button onClick={() => addTweet()}>Tweet</button>
-          <p>{caractere.length}/280</p>
+          <p>{letterCount}/280 </p>
+          <button onClick={() => handleSubmit()}>Tweet</button>
         </div>
-        <div className={styles.middleDown}>{contentMap}</div>
+        <div className={styles.middleDown}>
+          <LastTweets />
+        </div>
       </div>
-      <div className={styles.right}></div>
+      <div className={styles.right}><Trends></Trends></div>
     </div>
   );
 }

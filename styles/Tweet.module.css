@@ -2,3 +2,12 @@
     height: 50px;
     width: auto;
 }
+.tweet div {
+    margin-bottom: 5px;
+}
+.tweet img {
+    padding-top: 20px!important;
+}
+.username {
+    opacity: 0.5;
+}
